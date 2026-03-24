@@ -1,0 +1,815 @@
+<mujoco model="hopejr_go2">
+  <compiler angle="radian" autolimits="true"/>
+
+  <option cone="elliptic" impratio="100"/>
+
+  <default>
+    <default class="go2">
+      <geom friction="0.4" margin="0.001" condim="1"/>
+      <joint axis="0 1 0" damping="0.1" armature="0.01" frictionloss="0.2"/>
+      <motor ctrlrange="-23.7 23.7"/>
+      <default class="abduction">
+        <joint axis="1 0 0" range="-1.0472 1.0472"/>
+      </default>
+      <default class="hip">
+        <default class="front_hip">
+          <joint range="-1.5708 3.4907"/>
+        </default>
+        <default class="back_hip">
+          <joint range="-0.5236 4.5379"/>
+        </default>
+      </default>
+      <default class="knee">
+        <joint range="-2.7227 -0.83776"/>
+        <motor ctrlrange="-45.43 45.43"/>
+      </default>
+      <default class="visual">
+        <geom type="mesh" contype="0" conaffinity="0" group="2"/>
+      </default>
+      <default class="collision">
+        <geom group="3"/>
+        <default class="foot">
+          <geom size="0.022" pos="-0.002 0 -0.213" priority="1" condim="6"
+            friction="0.4 0.02 0.01"/>
+        </default>
+      </default>
+    </default>
+    <default class="hopejr">
+      <default class="arm_visual">
+        <geom type="mesh" contype="0" conaffinity="0" group="2"/>
+      </default>
+      <default class="arm_collision">
+        <geom type="mesh" group="3"/>
+      </default>
+    </default>
+  </default>
+
+  <asset>
+    <!-- Go2 meshes -->
+    <mesh file="assets/base_0.obj"/>
+    <mesh file="assets/base_1.obj"/>
+    <mesh file="assets/base_2.obj"/>
+    <mesh file="assets/base_3.obj"/>
+    <mesh file="assets/base_4.obj"/>
+    <mesh file="assets/hip_0.obj"/>
+    <mesh file="assets/hip_1.obj"/>
+    <mesh file="assets/thigh_0.obj"/>
+    <mesh file="assets/thigh_1.obj"/>
+    <mesh file="assets/thigh_mirror_0.obj"/>
+    <mesh file="assets/thigh_mirror_1.obj"/>
+    <mesh file="assets/calf_0.obj"/>
+    <mesh file="assets/calf_1.obj"/>
+    <mesh file="assets/calf_mirror_0.obj"/>
+    <mesh file="assets/calf_mirror_1.obj"/>
+    <mesh file="assets/foot.obj"/>
+
+    <!-- Arm meshes -->
+    <mesh name="arm_base_link" file="assets/arm_base_link.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="arm_shoulder_yaw" file="assets/arm_shoulder_yaw.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="arm_shoulder_roll" file="assets/arm_shoulder_roll.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="arm_upper_elbow" file="assets/arm_upper_elbow.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="arm_lower_elbow" file="assets/arm_lower_elbow.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="arm_forearm" file="assets/arm_forearm.stl" scale="0.001 0.001 0.001"/>
+
+    <!-- Hand meshes (scale 0.1) -->
+    <mesh name="hand_base_link" file="assets/hand_base_link.stl" scale="0.0001 0.0001 0.0001"/>
+    <mesh name="hand_hand" file="assets/hand_hand.stl" scale="0.0001 0.0001 0.0001"/>
+    <mesh name="hand_thumb_mcp_2" file="assets/hand_thumb_mcp_2.stl" scale="0.0001 0.0001 0.0001"/>
+    <mesh name="hand_thumb_pip_1" file="assets/hand_thumb_pip_1.stl" scale="0.0001 0.0001 0.0001"/>
+    <mesh name="hand_thumb_pip_2" file="assets/hand_thumb_pip_2.stl" scale="0.0001 0.0001 0.0001"/>
+    <mesh name="hand_thumb_dip" file="assets/hand_thumb_dip.stl" scale="0.0001 0.0001 0.0001"/>
+    <mesh name="hand_mcp_1" file="assets/hand_mcp_1.stl" scale="0.0001 0.0001 0.0001"/>
+    <mesh name="hand_mcp_2" file="assets/hand_mcp_2.stl" scale="0.0001 0.0001 0.0001"/>
+    <mesh name="hand_pip" file="assets/hand_pip.stl" scale="0.0001 0.0001 0.0001"/>
+    <mesh name="hand_dip_1" file="assets/hand_dip_1.stl" scale="0.0001 0.0001 0.0001"/>
+    <mesh name="hand_dip_2" file="assets/hand_dip_2.stl" scale="0.0001 0.0001 0.0001"/>
+
+    <texture type="2d" name="groundplane" builtin="checker" mark="edge"
+      rgb1="0.2 0.3 0.4" rgb2="0.1 0.2 0.3" markrgb="0.8 0.8 0.8"
+      width="300" height="300"/>
+    <material name="groundplane" texture="groundplane" texuniform="true"
+      texrepeat="5 5" reflectance="0.2"/>
+  </asset>
+
+  <worldbody>
+    <light pos="0 0 3.5" dir="0 0 -1" directional="true"/>
+    <geom name="floor" size="0 0 0.05" type="plane" material="groundplane" condim="3"/>
+
+    <body name="base_link" pos="0 0 0.445" childclass="go2">
+      <freejoint name="float_base"/>
+      <site name="imu" size="0.01" pos="0.07862 -0.0016 -0.00057"/>
+      <inertial pos="0.0223 0.002 -0.0005" quat="0.997786 0.00475863 0.0640902 -0.0195141"
+        mass="6.921" diaginertia="0.0636658 0.0565041 0.0167372"/>
+
+      <!-- Base visual -->
+      <geom class="visual" mesh="base_0"/>
+      <geom class="visual" mesh="base_1"/>
+      <geom class="visual" mesh="base_2"/>
+      <geom class="visual" mesh="base_3"/>
+      <geom class="visual" mesh="base_4"/>
+      <!-- Base collision -->
+      <geom class="collision" type="box" size="0.1955 0.0665 0.057"
+        pos="0.0223 0 -0.0005"/>
+
+      <!-- Front Right Leg -->
+      <body name="FR_hip" pos="0.1934 -0.0465 0">
+        <inertial pos="-0.0054 -0.00194 -0.000105" quat="0.483423 0.516698 -0.483423 0.515556"
+          mass="0.678" diaginertia="0.000624447 0.000480247 0.000347497"/>
+        <joint class="abduction" name="FR_hip_joint"/>
+        <geom class="visual" mesh="hip_0"/>
+        <geom class="collision" type="capsule" size="0.035" fromto="0 0 0 0 -0.0418 0"/>
+        <body name="FR_thigh" pos="0 -0.0955 0">
+          <inertial pos="-0.00374 -0.0223 -0.0327" quat="0.989 -0.13963 0 0"
+            mass="1.152" diaginertia="0.00584724 0.00572509 0.000468638"/>
+          <joint class="front_hip" name="FR_thigh_joint"/>
+          <geom class="visual" mesh="thigh_0"/>
+          <geom class="visual" mesh="thigh_1"/>
+          <geom class="collision" type="capsule" size="0.02" fromto="0 0 0 -0.003 0 -0.2"/>
+          <body name="FR_calf" pos="-0.003 0 -0.2">
+            <inertial pos="0.00548 0 -0.0696" quat="0.995776 -0.0918014 0 0"
+              mass="0.154" diaginertia="0.000801389 0.000806726 0.0000106675"/>
+            <joint class="knee" name="FR_calf_joint"/>
+            <geom class="visual" mesh="calf_0"/>
+            <geom class="visual" mesh="calf_1"/>
+            <geom class="collision" type="capsule" size="0.015" fromto="0 0 0 -0.002 0 -0.213"/>
+            <geom class="foot" name="FR"/>
+          </body>
+        </body>
+      </body>
+
+      <!-- Front Left Leg -->
+      <body name="FL_hip" pos="0.1934 0.0465 0">
+        <inertial pos="-0.0054 0.00194 -0.000105" quat="0.515556 0.483423 -0.516698 0.483423"
+          mass="0.678" diaginertia="0.000624447 0.000480247 0.000347497"/>
+        <joint class="abduction" name="FL_hip_joint"/>
+        <geom class="visual" mesh="hip_1"/>
+        <geom class="collision" type="capsule" size="0.035" fromto="0 0 0 0 0.0418 0"/>
+        <body name="FL_thigh" pos="0 0.0955 0">
+          <inertial pos="-0.00374 0.0223 -0.0327" quat="0.989 0.13963 0 0"
+            mass="1.152" diaginertia="0.00584724 0.00572509 0.000468638"/>
+          <joint class="front_hip" name="FL_thigh_joint"/>
+          <geom class="visual" mesh="thigh_mirror_0"/>
+          <geom class="visual" mesh="thigh_mirror_1"/>
+          <geom class="collision" type="capsule" size="0.02" fromto="0 0 0 -0.003 0 -0.2"/>
+          <body name="FL_calf" pos="-0.003 0 -0.2">
+            <inertial pos="0.00548 0 -0.0696" quat="0.995776 -0.0918014 0 0"
+              mass="0.154" diaginertia="0.000801389 0.000806726 0.0000106675"/>
+            <joint class="knee" name="FL_calf_joint"/>
+            <geom class="visual" mesh="calf_mirror_0"/>
+            <geom class="visual" mesh="calf_mirror_1"/>
+            <geom class="collision" type="capsule" size="0.015" fromto="0 0 0 -0.002 0 -0.213"/>
+            <geom class="foot" name="FL"/>
+          </body>
+        </body>
+      </body>
+
+      <!-- Rear Right Leg -->
+      <body name="RR_hip" pos="-0.1934 -0.0465 0">
+        <inertial pos="0.0054 -0.00194 -0.000105" quat="0.483423 0.516698 -0.483423 0.515556"
+          mass="0.678" diaginertia="0.000624447 0.000480247 0.000347497"/>
+        <joint class="abduction" name="RR_hip_joint"/>
+        <geom class="visual" mesh="hip_0"/>
+        <geom class="collision" type="capsule" size="0.035" fromto="0 0 0 0 -0.0418 0"/>
+        <body name="RR_thigh" pos="0 -0.0955 0">
+          <inertial pos="-0.00374 -0.0223 -0.0327" quat="0.989 -0.13963 0 0"
+            mass="1.152" diaginertia="0.00584724 0.00572509 0.000468638"/>
+          <joint class="back_hip" name="RR_thigh_joint"/>
+          <geom class="visual" mesh="thigh_0"/>
+          <geom class="visual" mesh="thigh_1"/>
+          <geom class="collision" type="capsule" size="0.02" fromto="0 0 0 -0.003 0 -0.2"/>
+          <body name="RR_calf" pos="-0.003 0 -0.2">
+            <inertial pos="0.00548 0 -0.0696" quat="0.995776 -0.0918014 0 0"
+              mass="0.154" diaginertia="0.000801389 0.000806726 0.0000106675"/>
+            <joint class="knee" name="RR_calf_joint"/>
+            <geom class="visual" mesh="calf_0"/>
+            <geom class="visual" mesh="calf_1"/>
+            <geom class="collision" type="capsule" size="0.015" fromto="0 0 0 -0.002 0 -0.213"/>
+            <geom class="foot" name="RR"/>
+          </body>
+        </body>
+      </body>
+
+      <!-- Rear Left Leg -->
+      <body name="RL_hip" pos="-0.1934 0.0465 0">
+        <inertial pos="0.0054 0.00194 -0.000105" quat="0.515556 0.483423 -0.516698 0.483423"
+          mass="0.678" diaginertia="0.000624447 0.000480247 0.000347497"/>
+        <joint class="abduction" name="RL_hip_joint"/>
+        <geom class="visual" mesh="hip_1"/>
+        <geom class="collision" type="capsule" size="0.035" fromto="0 0 0 0 0.0418 0"/>
+        <body name="RL_thigh" pos="0 0.0955 0">
+          <inertial pos="-0.00374 0.0223 -0.0327" quat="0.989 0.13963 0 0"
+            mass="1.152" diaginertia="0.00584724 0.00572509 0.000468638"/>
+          <joint class="back_hip" name="RL_thigh_joint"/>
+          <geom class="visual" mesh="thigh_mirror_0"/>
+          <geom class="visual" mesh="thigh_mirror_1"/>
+          <geom class="collision" type="capsule" size="0.02" fromto="0 0 0 -0.003 0 -0.2"/>
+          <body name="RL_calf" pos="-0.003 0 -0.2">
+            <inertial pos="0.00548 0 -0.0696" quat="0.995776 -0.0918014 0 0"
+              mass="0.154" diaginertia="0.000801389 0.000806726 0.0000106675"/>
+            <joint class="knee" name="RL_calf_joint"/>
+            <geom class="visual" mesh="calf_mirror_0"/>
+            <geom class="visual" mesh="calf_mirror_1"/>
+            <geom class="collision" type="capsule" size="0.015" fromto="0 0 0 -0.002 0 -0.213"/>
+            <geom class="foot" name="RL"/>
+          </body>
+        </body>
+      </body>
+
+      <!-- ======================== -->
+      <!-- HopeJR Right Arm + Hand  -->
+      <!-- ======================== -->
+      <body name="arm_base_link" pos="-0.07024 -0.00070 0.06723" euler="0 1.5708 1.5708" childclass="hopejr">
+        <inertial pos="-0.02 0 0.028" mass="1.260139"
+          fullinertia="0.003444 0.003173 0.002316 0.000000060725 0.000000223974 0.0003306"/>
+        <geom class="arm_visual" mesh="arm_base_link"/>
+
+        <!-- shoulder_pitch joint -->
+        <body name="shoulder_yaw_link" pos="0 0.07106 0.04453">
+          <inertial pos="0 0 0" mass="0.252213"
+            fullinertia="0.0001227 0.0001678 0.0001553 0.000000629536 -0.000000333468 -0.000000674054"/>
+          <joint name="shoulder_pitch" type="hinge" axis="0 1 0" range="-6.28 6.28" damping="0.1" armature="0.01"/>
+          <geom class="arm_visual" mesh="arm_shoulder_yaw"/>
+
+          <!-- shoulder_yaw joint -->
+          <body name="shoulder_roll_link" pos="0 0.05585 0" euler="-1.5708 0 0">
+            <inertial pos="-0.02 0 0.028" mass="0.422614"
+              fullinertia="0.0006959 0.0007655 0.0002446 0.000006134701 -0.000083430347 0.000025066263"/>
+            <joint name="shoulder_yaw" type="hinge" axis="1 0 0" range="-1.71 1.681" damping="0.1" armature="0.01"/>
+            <geom class="arm_visual" mesh="arm_shoulder_roll"/>
+
+            <!-- shoulder_roll joint -->
+            <body name="upper_elbow" pos="0 0 0.0884">
+              <inertial pos="-0.02 0 0.028" mass="0.243803"
+                fullinertia="0.0003227 0.0003959 0.0001746 -0.000000062111 -0.0001214 -0.000000048168"/>
+              <joint name="shoulder_roll" type="hinge" axis="0 0 1" range="-1.172 1.172" damping="0.1" armature="0.01"/>
+              <geom class="arm_visual" mesh="arm_upper_elbow"/>
+
+              <!-- elbow_flex joint -->
+              <body name="lower_elbow" pos="0.03765 0 0.11311">
+                <inertial pos="-0.02 0 0.028" mass="0.1882"
+                  fullinertia="0.0001196 0.000096307138 0.0001047 0.000002288885 0.000001137302 0.000003223544"/>
+                <joint name="elbow_flex" type="hinge" axis="0 -1 0" range="-0.96 1.41" damping="0.1" armature="0.01"/>
+                <geom class="arm_visual" mesh="arm_lower_elbow" euler="0 1.5708 0"/>
+
+                <!-- wrist_roll joint -->
+                <body name="forearm" pos="0.06325 0 0">
+                  <inertial pos="-0.02 0 0.028" mass="0.208355"
+                    fullinertia="0.0002051 0.0002222 0.0001122 0.000000044894 -0.000004226706 -0.000002431512"/>
+                  <joint name="wrist_roll" type="hinge" axis="-1 0 0" range="-0.7854 3.6652" damping="0.1" armature="0.01"/>
+                  <geom class="arm_visual" mesh="arm_forearm" euler="0 1.5708 0"/>
+
+                  <!-- wrist_yaw joint -->
+                  <body name="hand_base_link" pos="0.0917 0.00021 0">
+                    <inertial pos="-0.002 0 0.0028" mass="0.03323"
+                      fullinertia="0.000018824494 0.00001505929 0.000013661405 -0.000000571474 -0.000000041098 0.000000023636"/>
+                    <joint name="wrist_yaw" type="hinge" axis="0 0 1" range="-0.1745 0.1745" damping="0.05" armature="0.005"/>
+                    <geom class="arm_visual" mesh="hand_base_link"/>
+
+                    <!-- wrist_pitch joint -->
+                    <body name="hand" pos="0.029887 0.007923 0" euler="0 1.5708 0">
+                      <inertial pos="0 0 0" mass="0.252893"
+                        fullinertia="0.0002839 0.0001891 0.0001469 0.000003336317 0.000004077546 0.000000331897"/>
+                      <joint name="hand_wrist_pitch" type="hinge" axis="0 1 0" range="-1.3090 1.3963" damping="0.05" armature="0.005"/>
+                      <geom class="arm_visual" mesh="hand_hand"/>
+
+                      <!-- ====== THUMB ====== -->
+                      <body name="hand_thumb_mcp_2" pos="0.019772 0.028618 0.0058046" euler="2.7227 0.1920 -1.1694">
+                        <inertial pos="0 0 0" mass="0.008776"
+                          fullinertia="0.000000783215 0.000000932685 0.000000534905 0.000000007992 0.000000266897 -0.000000055174"/>
+                        <joint name="hand_thumb_mcp_2" type="hinge" axis="0 0 1" range="-3 -0.043" damping="0.02" armature="0.002"/>
+                        <geom class="arm_visual" mesh="hand_thumb_mcp_2"/>
+
+                        <!-- thumb_pip_1_support -->
+                        <body name="hand_thumb_pip_1_support" pos="0.01180315 -0.00121475 -0.0229186" euler="-2.7489 1.1195 -0.3626">
+                          <inertial pos="0 0 0" mass="0.001" diaginertia="1e-8 1e-8 1e-8"/>
+                          <joint name="hand_thumb_pip_1_support" type="hinge" axis="0 -1 0" range="0 1.1781" damping="0.02" armature="0.002"/>
+
+                          <!-- thumb_pip_1 -->
+                          <body name="hand_thumb_pip_1" pos="0.0152 0 0">
+                            <inertial pos="0 0 0" mass="0.007142"
+                              fullinertia="0.000000233324 0.000000597862 0.000000638412 -0.000000000007 0.00000000023 0.000000000054"/>
+                            <joint name="hand_thumb_pip_1" type="hinge" axis="0 -1 0" range="0 1.1781" damping="0.02" armature="0.002"/>
+                            <geom class="arm_visual" mesh="hand_thumb_pip_1"/>
+
+                            <!-- thumb_pip_2_support -->
+                            <body name="hand_thumb_pip_2_support" pos="0.0168 0 0">
+                              <inertial pos="0 0 0" mass="0.001" diaginertia="1e-8 1e-8 1e-8"/>
+                              <joint name="hand_thumb_pip_2_support" type="hinge" axis="0 -1 0" range="0 1.1781" damping="0.02" armature="0.002"/>
+
+                              <!-- thumb_pip_2 -->
+                              <body name="hand_thumb_pip_2" pos="0.0152 0 0">
+                                <inertial pos="0 0 0" mass="0.006089"
+                                  fullinertia="0.000000197597 0.000000404632 0.000000440963 -0.000000000005 0.00000000043 0.000000000054"/>
+                                <joint name="hand_thumb_pip_2" type="hinge" axis="0 -1 0" range="0 1.1781" damping="0.02" armature="0.002"/>
+                                <geom class="arm_visual" mesh="hand_thumb_pip_2"/>
+
+                                <!-- thumb_dip_support -->
+                                <body name="hand_thumb_dip_support" pos="0.0128 0 0">
+                                  <inertial pos="0 0 0" mass="0.001" diaginertia="1e-8 1e-8 1e-8"/>
+                                  <joint name="hand_thumb_dip_support" type="hinge" axis="0 -1 0" range="0 1.1781" damping="0.02" armature="0.002"/>
+
+                                  <!-- thumb_dip -->
+                                  <body name="hand_thumb_dip" pos="0.0152 0 0">
+                                    <inertial pos="0 0 0" mass="0.005429"
+                                      fullinertia="0.000000155671 0.00000033961 0.000000357923 0.000000000024 0.000000002166 0.000000000002"/>
+                                    <joint name="hand_thumb_dip" type="hinge" axis="0 -1 0" range="0 1.1781" damping="0.02" armature="0.002"/>
+                                    <geom class="arm_visual" mesh="hand_thumb_dip"/>
+                                  </body>
+                                </body>
+                              </body>
+                            </body>
+                          </body>
+                        </body>
+                      </body>
+
+                      <!-- ====== INDEX FINGER ====== -->
+                      <body name="hand_index_mcp_1" pos="0.0071613 0.025677 0.085375" euler="-1.5497 -1.4831 1.5601">
+                        <inertial pos="0 0 0" mass="0.004836"
+                          fullinertia="0.000000235908 0.000000740439 0.000000830731 -0.000000006556 0.000000001806 0.000000000035"/>
+                        <geom class="arm_visual" mesh="hand_mcp_1"/>
+
+                        <!-- index_mcp_2_support -->
+                        <body name="hand_index_mcp_2_support" pos="0 0 0">
+                          <inertial pos="0 0 0" mass="0.001" diaginertia="1e-8 1e-8 1e-8"/>
+                          <joint name="hand_index_mcp_2_support" type="hinge" axis="0 1 0" range="0 1.1781" damping="0.02" armature="0.002"/>
+
+                          <!-- index_mcp_2 -->
+                          <body name="hand_index_mcp_2" pos="0.0152 0 0">
+                            <inertial pos="0 0 0" mass="0.001654"
+                              fullinertia="0.000000049479 0.000000032432 0.000000038462 0.000000000263 0.000000000299 0.000000000057"/>
+                            <joint name="hand_index_mcp_2" type="hinge" axis="0 1 0" range="0 1.1781" damping="0.02" armature="0.002"/>
+                            <geom class="arm_visual" mesh="hand_mcp_2"/>
+
+                            <!-- index_pip_support -->
+                            <body name="hand_index_pip_support" pos="-0.0195135 0 0">
+                              <inertial pos="0 0 0" mass="0.001" diaginertia="1e-8 1e-8 1e-8"/>
+                              <joint name="hand_index_pip_support" type="hinge" axis="0 0 1" range="-0.4154 0.4154" damping="0.02" armature="0.002"/>
+
+                              <!-- index_pip -->
+                              <body name="hand_index_pip" pos="0.0435 0 0">
+                                <inertial pos="0 0 0" mass="0.005708"
+                                  fullinertia="0.00000018835 0.000000372084 0.00000039757 0.00000001165 0.000000000165 -0.000000000039"/>
+                                <joint name="hand_index_pip" type="hinge" axis="0 0 1" range="-0.4154 0.4154" damping="0.02" armature="0.002"/>
+                                <geom class="arm_visual" mesh="hand_pip"/>
+
+                                <!-- index_dip_1_support -->
+                                <body name="hand_index_dip_1_support" pos="-0.0029132 0 0">
+                                  <inertial pos="0 0 0" mass="0.001" diaginertia="1e-8 1e-8 1e-8"/>
+                                  <joint name="hand_index_dip_1_support" type="hinge" axis="0 1 0" range="0 1.1781" damping="0.02" armature="0.002"/>
+
+                                  <!-- index_dip_1 -->
+                                  <body name="hand_index_dip_1" pos="0.0152 0 0">
+                                    <inertial pos="0 0 0" mass="0.005093"
+                                      fullinertia="0.000000143621 0.000000290288 0.000000314107 -0.00000000003 0.000000000091 -0.000000000079"/>
+                                    <joint name="hand_index_dip_1" type="hinge" axis="0 1 0" range="0 1.1781" damping="0.02" armature="0.002"/>
+                                    <geom class="arm_visual" mesh="hand_dip_1"/>
+
+                                    <!-- index_dip_2_support -->
+                                    <body name="hand_index_dip_2_support" pos="0.0106 0 0">
+                                      <inertial pos="0 0 0" mass="0.001" diaginertia="1e-8 1e-8 1e-8"/>
+                                      <joint name="hand_index_dip_2_support" type="hinge" axis="0 1 0" range="0 1.1781" damping="0.02" armature="0.002"/>
+
+                                      <!-- index_dip_2 -->
+                                      <body name="hand_index_dip_2" pos="0.0152 0 0">
+                                        <inertial pos="0 0 0" mass="0.005429"
+                                          fullinertia="0.000000155634 0.000000339577 0.000000357884 0.000000000003 -0.000000002159 -0.000000000002"/>
+                                        <joint name="hand_index_dip_2" type="hinge" axis="0 1 0" range="0 1.1781" damping="0.02" armature="0.002"/>
+                                        <geom class="arm_visual" mesh="hand_dip_2"/>
+                                      </body>
+                                    </body>
+                                  </body>
+                                </body>
+                              </body>
+                            </body>
+                          </body>
+                        </body>
+                      </body>
+
+                      <!-- ====== MIDDLE FINGER ====== -->
+                      <body name="hand_middle_mcp_1" pos="0.0024581 0.0077754 0.087322" euler="-1.3880 -1.5656 1.3993">
+                        <inertial pos="0 0 0" mass="0.004836"
+                          fullinertia="0.000000235908 0.000000740439 0.000000830731 -0.000000006556 0.000000001806 0.000000000035"/>
+                        <geom class="arm_visual" mesh="hand_mcp_1"/>
+
+                        <!-- middle_mcp_2_support -->
+                        <body name="hand_middle_mcp_2_support" pos="0 0 0">
+                          <inertial pos="0 0 0" mass="0.001" diaginertia="1e-8 1e-8 1e-8"/>
+                          <joint name="hand_middle_mcp_2_support" type="hinge" axis="0 1 0" range="0 1.1781" damping="0.02" armature="0.002"/>
+
+                          <!-- middle_mcp_2 -->
+                          <body name="hand_middle_mcp_2" pos="0.0152 0 0">
+                            <inertial pos="0 0 0" mass="0.001654"
+                              fullinertia="0.000000049479 0.000000032432 0.000000038462 0.000000000263 0.000000000299 0.000000000057"/>
+                            <joint name="hand_middle_mcp_2" type="hinge" axis="0 1 0" range="0 1.1781" damping="0.02" armature="0.002"/>
+                            <geom class="arm_visual" mesh="hand_mcp_2"/>
+
+                            <!-- middle_pip_support -->
+                            <body name="hand_middle_pip_support" pos="-0.0195135 0 0">
+                              <inertial pos="0 0 0" mass="0.001" diaginertia="1e-8 1e-8 1e-8"/>
+                              <joint name="hand_middle_pip_support" type="hinge" axis="0 0 1" range="-0.4154 0.4154" damping="0.02" armature="0.002"/>
+
+                              <!-- middle_pip -->
+                              <body name="hand_middle_pip" pos="0.0435 0 0">
+                                <inertial pos="0 0 0" mass="0.005708"
+                                  fullinertia="0.00000018835 0.000000372084 0.00000039757 0.00000001165 0.000000000165 -0.000000000039"/>
+                                <joint name="hand_middle_pip" type="hinge" axis="0 0 1" range="-0.4154 0.4154" damping="0.02" armature="0.002"/>
+                                <geom class="arm_visual" mesh="hand_pip"/>
+
+                                <!-- middle_dip_1_support -->
+                                <body name="hand_middle_dip_1_support" pos="-0.0029132 0 0">
+                                  <inertial pos="0 0 0" mass="0.001" diaginertia="1e-8 1e-8 1e-8"/>
+                                  <joint name="hand_middle_dip_1_support" type="hinge" axis="0 1 0" range="0 1.1781" damping="0.02" armature="0.002"/>
+
+                                  <!-- middle_dip_1 -->
+                                  <body name="hand_middle_dip_1" pos="0.0152 0 0">
+                                    <inertial pos="0 0 0" mass="0.005093"
+                                      fullinertia="0.000000143621 0.000000290288 0.000000314107 -0.00000000003 0.000000000091 -0.000000000079"/>
+                                    <joint name="hand_middle_dip_1" type="hinge" axis="0 1 0" range="0 1.1781" damping="0.02" armature="0.002"/>
+                                    <geom class="arm_visual" mesh="hand_dip_1"/>
+
+                                    <!-- middle_dip_2_support -->
+                                    <body name="hand_middle_dip_2_support" pos="0.0106 0 0">
+                                      <inertial pos="0 0 0" mass="0.001" diaginertia="1e-8 1e-8 1e-8"/>
+                                      <joint name="hand_middle_dip_2_support" type="hinge" axis="0 1 0" range="0 1.1781" damping="0.02" armature="0.002"/>
+
+                                      <!-- middle_dip_2 -->
+                                      <body name="hand_middle_dip_2" pos="0.0152 0 0">
+                                        <inertial pos="0 0 0" mass="0.005429"
+                                          fullinertia="0.000000155634 0.000000339577 0.000000357884 0.000000000003 -0.000000002159 -0.000000000002"/>
+                                        <joint name="hand_middle_dip_2" type="hinge" axis="0 1 0" range="0 1.1781" damping="0.02" armature="0.002"/>
+                                        <geom class="arm_visual" mesh="hand_dip_2"/>
+                                      </body>
+                                    </body>
+                                  </body>
+                                </body>
+                              </body>
+                            </body>
+                          </body>
+                        </body>
+                      </body>
+
+                      <!-- ====== RING FINGER ====== -->
+                      <body name="hand_ring_mcp_1" pos="0.0085778 -0.013244 0.08552" euler="-1.6371 -1.7310 1.7658">
+                        <inertial pos="0 0 0" mass="0.004836"
+                          fullinertia="0.000000235908 0.000000740439 0.000000830731 -0.000000006556 0.000000001806 0.000000000035"/>
+                        <geom class="arm_visual" mesh="hand_mcp_1"/>
+
+                        <!-- ring_mcp_2_support -->
+                        <body name="hand_ring_mcp_2_support" pos="0 0 0">
+                          <inertial pos="0 0 0" mass="0.001" diaginertia="1e-8 1e-8 1e-8"/>
+                          <joint name="hand_ring_mcp_2_support" type="hinge" axis="0 1 0" range="0 1.1781" damping="0.02" armature="0.002"/>
+
+                          <!-- ring_mcp_2 -->
+                          <body name="hand_ring_mcp_2" pos="0.0152 0 0">
+                            <inertial pos="0 0 0" mass="0.001654"
+                              fullinertia="0.000000049479 0.000000032432 0.000000038462 0.000000000263 0.000000000299 0.000000000057"/>
+                            <joint name="hand_ring_mcp_2" type="hinge" axis="0 1 0" range="0 1.1781" damping="0.02" armature="0.002"/>
+                            <geom class="arm_visual" mesh="hand_mcp_2"/>
+
+                            <!-- ring_pip_support -->
+                            <body name="hand_ring_pip_support" pos="-0.0195135 0 0">
+                              <inertial pos="0 0 0" mass="0.001" diaginertia="1e-8 1e-8 1e-8"/>
+                              <joint name="hand_ring_pip_support" type="hinge" axis="0 0 1" range="-0.4154 0.4154" damping="0.02" armature="0.002"/>
+
+                              <!-- ring_pip -->
+                              <body name="hand_ring_pip" pos="0.0435 0 0">
+                                <inertial pos="0 0 0" mass="0.005708"
+                                  fullinertia="0.00000018835 0.000000372084 0.00000039757 0.00000001165 0.000000000165 -0.000000000039"/>
+                                <joint name="hand_ring_pip" type="hinge" axis="0 0 1" range="-0.4154 0.4154" damping="0.02" armature="0.002"/>
+                                <geom class="arm_visual" mesh="hand_pip"/>
+
+                                <!-- ring_dip_1_support -->
+                                <body name="hand_ring_dip_1_support" pos="-0.0029132 0 0">
+                                  <inertial pos="0 0 0" mass="0.001" diaginertia="1e-8 1e-8 1e-8"/>
+                                  <joint name="hand_ring_dip_1_support" type="hinge" axis="0 1 0" range="0 1.1781" damping="0.02" armature="0.002"/>
+
+                                  <!-- ring_dip_1 -->
+                                  <body name="hand_ring_dip_1" pos="0.0152 0 0">
+                                    <inertial pos="0 0 0" mass="0.005093"
+                                      fullinertia="0.000000143621 0.000000290288 0.000000314107 -0.00000000003 0.000000000091 -0.000000000079"/>
+                                    <joint name="hand_ring_dip_1" type="hinge" axis="0 1 0" range="0 1.1781" damping="0.02" armature="0.002"/>
+                                    <geom class="arm_visual" mesh="hand_dip_1"/>
+
+                                    <!-- ring_dip_2_support -->
+                                    <body name="hand_ring_dip_2_support" pos="0.0106 0 0">
+                                      <inertial pos="0 0 0" mass="0.001" diaginertia="1e-8 1e-8 1e-8"/>
+                                      <joint name="hand_ring_dip_2_support" type="hinge" axis="0 1 0" range="0 1.1781" damping="0.02" armature="0.002"/>
+
+                                      <!-- ring_dip_2 -->
+                                      <body name="hand_ring_dip_2" pos="0.0152 0 0">
+                                        <inertial pos="0 0 0" mass="0.005429"
+                                          fullinertia="0.000000155634 0.000000339577 0.000000357884 0.000000000003 -0.000000002159 -0.000000000002"/>
+                                        <joint name="hand_ring_dip_2" type="hinge" axis="0 1 0" range="0 1.1781" damping="0.02" armature="0.002"/>
+                                        <geom class="arm_visual" mesh="hand_dip_2"/>
+                                      </body>
+                                    </body>
+                                  </body>
+                                </body>
+                              </body>
+                            </body>
+                          </body>
+                        </body>
+                      </body>
+
+                      <!-- ====== PINKY FINGER ====== -->
+                      <body name="hand_pinky_mcp_1" pos="0.016965 -0.031494 0.077426" euler="-1.5406 -1.9258 1.7600">
+                        <inertial pos="0 0 0" mass="0.004836"
+                          fullinertia="0.000000235908 0.000000740439 0.000000830731 -0.000000006556 0.000000001806 0.000000000035"/>
+                        <geom class="arm_visual" mesh="hand_mcp_1"/>
+
+                        <!-- pinky_mcp_2_support -->
+                        <body name="hand_pinky_mcp_2_support" pos="0 0 0">
+                          <inertial pos="0 0 0" mass="0.001" diaginertia="1e-8 1e-8 1e-8"/>
+                          <joint name="hand_pinky_mcp_2_support" type="hinge" axis="0 1 0" range="0 1.1781" damping="0.02" armature="0.002"/>
+
+                          <!-- pinky_mcp_2 -->
+                          <body name="hand_pinky_mcp_2" pos="0.0152 0 0">
+                            <inertial pos="0 0 0" mass="0.001654"
+                              fullinertia="0.000000049479 0.000000032432 0.000000038462 0.000000000263 0.000000000299 0.000000000057"/>
+                            <joint name="hand_pinky_mcp_2" type="hinge" axis="0 1 0" range="0 1.1781" damping="0.02" armature="0.002"/>
+                            <geom class="arm_visual" mesh="hand_mcp_2"/>
+
+                            <!-- pinky_pip_support -->
+                            <body name="hand_pinky_pip_support" pos="-0.0195135 0 0">
+                              <inertial pos="0 0 0" mass="0.001" diaginertia="1e-8 1e-8 1e-8"/>
+                              <joint name="hand_pinky_pip_support" type="hinge" axis="0 0 1" range="-0.4154 0.4154" damping="0.02" armature="0.002"/>
+
+                              <!-- pinky_pip -->
+                              <body name="hand_pinky_pip" pos="0.0435 0 0">
+                                <inertial pos="0 0 0" mass="0.005708"
+                                  fullinertia="0.00000018835 0.000000372084 0.00000039757 0.00000001165 0.000000000165 -0.000000000039"/>
+                                <joint name="hand_pinky_pip" type="hinge" axis="0 0 1" range="-0.4154 0.4154" damping="0.02" armature="0.002"/>
+                                <geom class="arm_visual" mesh="hand_pip"/>
+
+                                <!-- pinky_dip_1_support -->
+                                <body name="hand_pinky_dip_1_support" pos="-0.0029132 0 0">
+                                  <inertial pos="0 0 0" mass="0.001" diaginertia="1e-8 1e-8 1e-8"/>
+                                  <joint name="hand_pinky_dip_1_support" type="hinge" axis="0 1 0" range="0 1.1781" damping="0.02" armature="0.002"/>
+
+                                  <!-- pinky_dip_1 -->
+                                  <body name="hand_pinky_dip_1" pos="0.0152 0 0">
+                                    <inertial pos="0 0 0" mass="0.005093"
+                                      fullinertia="0.000000143621 0.000000290288 0.000000314107 -0.00000000003 0.000000000091 -0.000000000079"/>
+                                    <joint name="hand_pinky_dip_1" type="hinge" axis="0 1 0" range="0 1.1781" damping="0.02" armature="0.002"/>
+                                    <geom class="arm_visual" mesh="hand_dip_1"/>
+
+                                    <!-- pinky_dip_2_support -->
+                                    <body name="hand_pinky_dip_2_support" pos="0.0106 0 0">
+                                      <inertial pos="0 0 0" mass="0.001" diaginertia="1e-8 1e-8 1e-8"/>
+                                      <joint name="hand_pinky_dip_2_support" type="hinge" axis="0 1 0" range="0 1.1781" damping="0.02" armature="0.002"/>
+
+                                      <!-- pinky_dip_2 -->
+                                      <body name="hand_pinky_dip_2" pos="0.0152 0 0">
+                                        <inertial pos="0 0 0" mass="0.005429"
+                                          fullinertia="0.000000155634 0.000000339577 0.000000357884 0.000000000003 -0.000000002159 -0.000000000002"/>
+                                        <joint name="hand_pinky_dip_2" type="hinge" axis="0 1 0" range="0 1.1781" damping="0.02" armature="0.002"/>
+                                        <geom class="arm_visual" mesh="hand_dip_2"/>
+                                      </body>
+                                    </body>
+                                  </body>
+                                </body>
+                              </body>
+                            </body>
+                          </body>
+                        </body>
+                      </body>
+
+                    </body> <!-- hand -->
+                  </body> <!-- hand_base_link -->
+                </body> <!-- forearm -->
+              </body> <!-- lower_elbow -->
+            </body> <!-- upper_elbow -->
+          </body> <!-- shoulder_roll_link -->
+        </body> <!-- shoulder_yaw_link -->
+      </body> <!-- arm_base_link -->
+
+    </body> <!-- base_link -->
+  </worldbody>
+
+  <actuator>
+    <!-- Go2 leg actuators -->
+    <motor class="abduction" name="FR_hip" joint="FR_hip_joint"/>
+    <motor class="hip" name="FR_thigh" joint="FR_thigh_joint"/>
+    <motor class="knee" name="FR_calf" joint="FR_calf_joint"/>
+    <motor class="abduction" name="FL_hip" joint="FL_hip_joint"/>
+    <motor class="hip" name="FL_thigh" joint="FL_thigh_joint"/>
+    <motor class="knee" name="FL_calf" joint="FL_calf_joint"/>
+    <motor class="abduction" name="RR_hip" joint="RR_hip_joint"/>
+    <motor class="hip" name="RR_thigh" joint="RR_thigh_joint"/>
+    <motor class="knee" name="RR_calf" joint="RR_calf_joint"/>
+    <motor class="abduction" name="RL_hip" joint="RL_hip_joint"/>
+    <motor class="hip" name="RL_thigh" joint="RL_thigh_joint"/>
+    <motor class="knee" name="RL_calf" joint="RL_calf_joint"/>
+
+    <!-- Arm actuators -->
+    <motor name="shoulder_pitch" joint="shoulder_pitch" ctrlrange="-10 10"/>
+    <motor name="shoulder_yaw" joint="shoulder_yaw" ctrlrange="-10 10"/>
+    <motor name="shoulder_roll" joint="shoulder_roll" ctrlrange="-10 10"/>
+    <motor name="elbow_flex" joint="elbow_flex" ctrlrange="-10 10"/>
+    <motor name="wrist_roll" joint="wrist_roll" ctrlrange="-10 10"/>
+    <motor name="wrist_yaw" joint="wrist_yaw" ctrlrange="-10 10"/>
+    <motor name="hand_wrist_pitch" joint="hand_wrist_pitch" ctrlrange="-10 10"/>
+
+    <!-- Thumb actuators -->
+    <motor name="hand_thumb_mcp_2" joint="hand_thumb_mcp_2" ctrlrange="-2 2"/>
+    <motor name="hand_thumb_pip_1" joint="hand_thumb_pip_1" ctrlrange="-2 2"/>
+    <motor name="hand_thumb_pip_2" joint="hand_thumb_pip_2" ctrlrange="-2 2"/>
+    <motor name="hand_thumb_dip" joint="hand_thumb_dip" ctrlrange="-2 2"/>
+
+    <!-- Index finger actuators -->
+    <motor name="hand_index_mcp_2" joint="hand_index_mcp_2" ctrlrange="-2 2"/>
+    <motor name="hand_index_pip" joint="hand_index_pip" ctrlrange="-2 2"/>
+    <motor name="hand_index_dip_1" joint="hand_index_dip_1" ctrlrange="-2 2"/>
+
+    <!-- Middle finger actuators -->
+    <motor name="hand_middle_mcp_2" joint="hand_middle_mcp_2" ctrlrange="-2 2"/>
+    <motor name="hand_middle_pip" joint="hand_middle_pip" ctrlrange="-2 2"/>
+    <motor name="hand_middle_dip_1" joint="hand_middle_dip_1" ctrlrange="-2 2"/>
+
+    <!-- Ring finger actuators -->
+    <motor name="hand_ring_mcp_2" joint="hand_ring_mcp_2" ctrlrange="-2 2"/>
+    <motor name="hand_ring_pip" joint="hand_ring_pip" ctrlrange="-2 2"/>
+    <motor name="hand_ring_dip_1" joint="hand_ring_dip_1" ctrlrange="-2 2"/>
+
+    <!-- Pinky finger actuators -->
+    <motor name="hand_pinky_mcp_2" joint="hand_pinky_mcp_2" ctrlrange="-2 2"/>
+    <motor name="hand_pinky_pip" joint="hand_pinky_pip" ctrlrange="-2 2"/>
+    <motor name="hand_pinky_dip_1" joint="hand_pinky_dip_1" ctrlrange="-2 2"/>
+  </actuator>
+
+  <equality>
+    <!-- Thumb mimic joints (multiplier=1) -->
+    <joint joint1="hand_thumb_pip_1_support" joint2="hand_thumb_pip_1" polycoef="0 1 0 0 0"/>
+    <joint joint1="hand_thumb_pip_2_support" joint2="hand_thumb_pip_2" polycoef="0 1 0 0 0"/>
+    <joint joint1="hand_thumb_dip_support" joint2="hand_thumb_dip" polycoef="0 1 0 0 0"/>
+
+    <!-- Index finger mimic joints -->
+    <joint joint1="hand_index_mcp_2_support" joint2="hand_index_mcp_2" polycoef="0 1 0 0 0"/>
+    <joint joint1="hand_index_pip_support" joint2="hand_index_pip" polycoef="0 1 0 0 0"/>
+    <joint joint1="hand_index_dip_1_support" joint2="hand_index_dip_1" polycoef="0 1 0 0 0"/>
+    <joint joint1="hand_index_dip_2_support" joint2="hand_index_dip_2" polycoef="0 1 0 0 0"/>
+    <joint joint1="hand_index_dip_2" joint2="hand_index_dip_1" polycoef="0 0.8 0 0 0"/>
+
+    <!-- Middle finger mimic joints -->
+    <joint joint1="hand_middle_mcp_2_support" joint2="hand_middle_mcp_2" polycoef="0 1 0 0 0"/>
+    <joint joint1="hand_middle_pip_support" joint2="hand_middle_pip" polycoef="0 1 0 0 0"/>
+    <joint joint1="hand_middle_dip_1_support" joint2="hand_middle_dip_1" polycoef="0 1 0 0 0"/>
+    <joint joint1="hand_middle_dip_2_support" joint2="hand_middle_dip_2" polycoef="0 1 0 0 0"/>
+    <joint joint1="hand_middle_dip_2" joint2="hand_middle_dip_1" polycoef="0 0.8 0 0 0"/>
+
+    <!-- Ring finger mimic joints -->
+    <joint joint1="hand_ring_mcp_2_support" joint2="hand_ring_mcp_2" polycoef="0 1 0 0 0"/>
+    <joint joint1="hand_ring_pip_support" joint2="hand_ring_pip" polycoef="0 1 0 0 0"/>
+    <joint joint1="hand_ring_dip_1_support" joint2="hand_ring_dip_1" polycoef="0 1 0 0 0"/>
+    <joint joint1="hand_ring_dip_2_support" joint2="hand_ring_dip_2" polycoef="0 1 0 0 0"/>
+    <joint joint1="hand_ring_dip_2" joint2="hand_ring_dip_1" polycoef="0 0.8 0 0 0"/>
+
+    <!-- Pinky finger mimic joints -->
+    <joint joint1="hand_pinky_mcp_2_support" joint2="hand_pinky_mcp_2" polycoef="0 1 0 0 0"/>
+    <joint joint1="hand_pinky_pip_support" joint2="hand_pinky_pip" polycoef="0 1 0 0 0"/>
+    <joint joint1="hand_pinky_dip_1_support" joint2="hand_pinky_dip_1" polycoef="0 1 0 0 0"/>
+    <joint joint1="hand_pinky_dip_2_support" joint2="hand_pinky_dip_2" polycoef="0 1 0 0 0"/>
+    <joint joint1="hand_pinky_dip_2" joint2="hand_pinky_dip_1" polycoef="0 0.8 0 0 0"/>
+  </equality>
+
+  <sensor>
+    <!-- Go2 joint position sensors -->
+    <jointpos name="FR_hip_pos" joint="FR_hip_joint"/>
+    <jointpos name="FR_thigh_pos" joint="FR_thigh_joint"/>
+    <jointpos name="FR_calf_pos" joint="FR_calf_joint"/>
+    <jointpos name="FL_hip_pos" joint="FL_hip_joint"/>
+    <jointpos name="FL_thigh_pos" joint="FL_thigh_joint"/>
+    <jointpos name="FL_calf_pos" joint="FL_calf_joint"/>
+    <jointpos name="RR_hip_pos" joint="RR_hip_joint"/>
+    <jointpos name="RR_thigh_pos" joint="RR_thigh_joint"/>
+    <jointpos name="RR_calf_pos" joint="RR_calf_joint"/>
+    <jointpos name="RL_hip_pos" joint="RL_hip_joint"/>
+    <jointpos name="RL_thigh_pos" joint="RL_thigh_joint"/>
+    <jointpos name="RL_calf_pos" joint="RL_calf_joint"/>
+
+    <!-- Go2 joint velocity sensors -->
+    <jointvel name="FR_hip_vel" joint="FR_hip_joint"/>
+    <jointvel name="FR_thigh_vel" joint="FR_thigh_joint"/>
+    <jointvel name="FR_calf_vel" joint="FR_calf_joint"/>
+    <jointvel name="FL_hip_vel" joint="FL_hip_joint"/>
+    <jointvel name="FL_thigh_vel" joint="FL_thigh_joint"/>
+    <jointvel name="FL_calf_vel" joint="FL_calf_joint"/>
+    <jointvel name="RR_hip_vel" joint="RR_hip_joint"/>
+    <jointvel name="RR_thigh_vel" joint="RR_thigh_joint"/>
+    <jointvel name="RR_calf_vel" joint="RR_calf_joint"/>
+    <jointvel name="RL_hip_vel" joint="RL_hip_joint"/>
+    <jointvel name="RL_thigh_vel" joint="RL_thigh_joint"/>
+    <jointvel name="RL_calf_vel" joint="RL_calf_joint"/>
+
+    <!-- Go2 joint torque sensors -->
+    <jointactuatorfrc name="FR_hip_torque" joint="FR_hip_joint" noise="0.01"/>
+    <jointactuatorfrc name="FR_thigh_torque" joint="FR_thigh_joint" noise="0.01"/>
+    <jointactuatorfrc name="FR_calf_torque" joint="FR_calf_joint" noise="0.01"/>
+    <jointactuatorfrc name="FL_hip_torque" joint="FL_hip_joint" noise="0.01"/>
+    <jointactuatorfrc name="FL_thigh_torque" joint="FL_thigh_joint" noise="0.01"/>
+    <jointactuatorfrc name="FL_calf_torque" joint="FL_calf_joint" noise="0.01"/>
+    <jointactuatorfrc name="RR_hip_torque" joint="RR_hip_joint" noise="0.01"/>
+    <jointactuatorfrc name="RR_thigh_torque" joint="RR_thigh_joint" noise="0.01"/>
+    <jointactuatorfrc name="RR_calf_torque" joint="RR_calf_joint" noise="0.01"/>
+    <jointactuatorfrc name="RL_hip_torque" joint="RL_hip_joint" noise="0.01"/>
+    <jointactuatorfrc name="RL_thigh_torque" joint="RL_thigh_joint" noise="0.01"/>
+    <jointactuatorfrc name="RL_calf_torque" joint="RL_calf_joint" noise="0.01"/>
+
+    <!-- Arm joint position sensors -->
+    <jointpos name="shoulder_pitch_pos" joint="shoulder_pitch"/>
+    <jointpos name="shoulder_yaw_pos" joint="shoulder_yaw"/>
+    <jointpos name="shoulder_roll_pos" joint="shoulder_roll"/>
+    <jointpos name="elbow_flex_pos" joint="elbow_flex"/>
+    <jointpos name="wrist_roll_pos" joint="wrist_roll"/>
+    <jointpos name="wrist_yaw_pos" joint="wrist_yaw"/>
+    <jointpos name="hand_wrist_pitch_pos" joint="hand_wrist_pitch"/>
+
+    <!-- Thumb joint position sensors -->
+    <jointpos name="hand_thumb_mcp_2_pos" joint="hand_thumb_mcp_2"/>
+    <jointpos name="hand_thumb_pip_1_pos" joint="hand_thumb_pip_1"/>
+    <jointpos name="hand_thumb_pip_2_pos" joint="hand_thumb_pip_2"/>
+    <jointpos name="hand_thumb_dip_pos" joint="hand_thumb_dip"/>
+
+    <!-- Index finger joint position sensors -->
+    <jointpos name="hand_index_mcp_2_pos" joint="hand_index_mcp_2"/>
+    <jointpos name="hand_index_pip_pos" joint="hand_index_pip"/>
+    <jointpos name="hand_index_dip_1_pos" joint="hand_index_dip_1"/>
+
+    <!-- Middle finger joint position sensors -->
+    <jointpos name="hand_middle_mcp_2_pos" joint="hand_middle_mcp_2"/>
+    <jointpos name="hand_middle_pip_pos" joint="hand_middle_pip"/>
+    <jointpos name="hand_middle_dip_1_pos" joint="hand_middle_dip_1"/>
+
+    <!-- Ring finger joint position sensors -->
+    <jointpos name="hand_ring_mcp_2_pos" joint="hand_ring_mcp_2"/>
+    <jointpos name="hand_ring_pip_pos" joint="hand_ring_pip"/>
+    <jointpos name="hand_ring_dip_1_pos" joint="hand_ring_dip_1"/>
+
+    <!-- Pinky finger joint position sensors -->
+    <jointpos name="hand_pinky_mcp_2_pos" joint="hand_pinky_mcp_2"/>
+    <jointpos name="hand_pinky_pip_pos" joint="hand_pinky_pip"/>
+    <jointpos name="hand_pinky_dip_1_pos" joint="hand_pinky_dip_1"/>
+
+    <!-- Arm joint velocity sensors -->
+    <jointvel name="shoulder_pitch_vel" joint="shoulder_pitch"/>
+    <jointvel name="shoulder_yaw_vel" joint="shoulder_yaw"/>
+    <jointvel name="shoulder_roll_vel" joint="shoulder_roll"/>
+    <jointvel name="elbow_flex_vel" joint="elbow_flex"/>
+    <jointvel name="wrist_roll_vel" joint="wrist_roll"/>
+    <jointvel name="wrist_yaw_vel" joint="wrist_yaw"/>
+    <jointvel name="hand_wrist_pitch_vel" joint="hand_wrist_pitch"/>
+
+    <!-- Thumb joint velocity sensors -->
+    <jointvel name="hand_thumb_mcp_2_vel" joint="hand_thumb_mcp_2"/>
+    <jointvel name="hand_thumb_pip_1_vel" joint="hand_thumb_pip_1"/>
+    <jointvel name="hand_thumb_pip_2_vel" joint="hand_thumb_pip_2"/>
+    <jointvel name="hand_thumb_dip_vel" joint="hand_thumb_dip"/>
+
+    <!-- Index finger joint velocity sensors -->
+    <jointvel name="hand_index_mcp_2_vel" joint="hand_index_mcp_2"/>
+    <jointvel name="hand_index_pip_vel" joint="hand_index_pip"/>
+    <jointvel name="hand_index_dip_1_vel" joint="hand_index_dip_1"/>
+
+    <!-- Middle finger joint velocity sensors -->
+    <jointvel name="hand_middle_mcp_2_vel" joint="hand_middle_mcp_2"/>
+    <jointvel name="hand_middle_pip_vel" joint="hand_middle_pip"/>
+    <jointvel name="hand_middle_dip_1_vel" joint="hand_middle_dip_1"/>
+
+    <!-- Ring finger joint velocity sensors -->
+    <jointvel name="hand_ring_mcp_2_vel" joint="hand_ring_mcp_2"/>
+    <jointvel name="hand_ring_pip_vel" joint="hand_ring_pip"/>
+    <jointvel name="hand_ring_dip_1_vel" joint="hand_ring_dip_1"/>
+
+    <!-- Pinky finger joint velocity sensors -->
+    <jointvel name="hand_pinky_mcp_2_vel" joint="hand_pinky_mcp_2"/>
+    <jointvel name="hand_pinky_pip_vel" joint="hand_pinky_pip"/>
+    <jointvel name="hand_pinky_dip_1_vel" joint="hand_pinky_dip_1"/>
+
+    <!-- IMU sensors -->
+    <framequat name="imu_quat" objtype="site" objname="imu"/>
+    <gyro name="imu_gyro" site="imu"/>
+    <accelerometer name="imu_acc" site="imu"/>
+    <framepos name="frame_pos" objtype="site" objname="imu"/>
+    <framelinvel name="frame_vel" objtype="site" objname="imu"/>
+  </sensor>
+
+  <keyframe>
+    <key name="home"
+      qpos="0 0 0.27 1 0 0 0
+            0 0.9 -1.8  0 0.9 -1.8  0 0.9 -1.8  0 0.9 -1.8
+            0 0 0 0 0 0 0
+            -1.5 0 0 0 0 0 0
+            0 0 0 0 0 0 0 0
+            0 0 0 0 0 0 0 0
+            0 0 0 0 0 0 0 0
+            0 0 0 0 0 0 0 0"
+      ctrl="0 0.9 -1.8  0 0.9 -1.8  0 0.9 -1.8  0 0.9 -1.8
+            0 0 0 0 0 0 0
+            0 0 0 0
+            0 0 0
+            0 0 0
+            0 0 0
+            0 0 0"/>
+  </keyframe>
+
+</mujoco>
